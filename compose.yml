@@ -1,0 +1,23 @@
+services:
+
+  swagger-ui:
+    container_name: "swagger-ui"
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8100:8080"
+    volumes:
+      - ./api/petstore.yaml:/petstore.yaml
+    environment:
+      SWAGGER_JSON: /petstore.yaml
+
+  api-mock:
+    container_name: "api-mock"
+    image: stoplight/prism:4
+    init: true
+    command: >
+      mock -p 4010 --host 0.0.0.0 /petstore.yaml
+    volumes:
+      - ./api/petstore.yaml:/petstore.yaml
+    ports:
+      - '8101:4010'
+
